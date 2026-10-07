@@ -1,0 +1,93 @@
+-*- org -*-
+Copyright (c) 2026 by zrajm. License: GPLv2.
+
+* [0/12] Frontend
+** TODO Hide note menu
+** TODO Make resizing of menu work again
+** TODO Switch between preview & Markdown
+   Insert a '\b' (backspace character) where the cursor is before running it
+   through Markdown. Then insert an HTML tag which we can scroll to in order to
+   get to that spot in the preview.
+*** TODO Figure out cursor position from user double-click in preview
+    When user double click/long taps on the preview text, we should switch to
+    edit mode, and place the cursor in the same position.
+
+    Deepseek says one can use something along the lines of:
+    ----------------------------------------
+    document.addEventListener('dblclick', () => {
+      const sel = window.getSelection()
+      if (sel.rangeCount === 0) { return }
+      const r = sel.getRangeAt(0)
+      console.log(r.toString(), r.startContainer, r.startOffset, r.endOffset)
+    })
+    ----------------------------------------
+    And insists that this work for double-clicking on text, even if it is
+    non-editable.
+** TODO Save (whole) notes to server
+   When this is done, rewrite syncNote() so as to retain the newest note
+   instead of always fetching the server version (and overwriting the local
+   note).
+** TODO Add Markdown
+   Markdown library and CSS shall be configurable.
+** TODO Separate (isolated) CSS for edit view
+** TODO Show errors in a notification-like card
+** TODO The note-selection menu should fade out foreground color
+   A scroll shadow. See chat.deepseek.com for an example.
+** TODO Multiple edit views
+   For making the most of a large screen, allow editing of multiple notes at
+   the same time. Dragging a note onto one of the borders of the edit view
+   should open up a new edit view there.
+** TODO Compress notes in localStorage?
+   Possibly compress notes, possibly whole data structure.
+** TODO Add note creation time to interface?
+   Reverse chronological sort by last update time
+   ----------------------------------------
+   git log --format='@@@%ct' --name-only --no-renames -- ??????????? | awk '
+       /^@@@/ { ts=substr($0,4); next }
+       NF {
+           if (!($0 in seen)) { seen[$0]=1; order[++n]=$0; updated[$0]=ts }
+           created[$0]=ts
+       }
+   END { for (i=1; i<=n; i++) { f=order[i]; printf '%s %s %s\n', updated[f], created[f], f } }'
+   ----------------------------------------
+** TODO Incrementally save edits to server                          :DISTANT:
+* [0/8] Backend
+** TODO Find some reasonable way of packaging some test data
+   The files of the current 'data/' dir + some scripts for setting up git as
+   the backend.
+** TODO Login
+** TODO Add '/api/create' for creating notes
+   Test for uniqueness, so as to not overwrite any note.
+   ----------------------------------------
+   LC_ALL="C"
+
+   # Create 11-char URL-safe base64 string, dash-builtins only.
+   random_id() {
+       local ID CHUNK CHR
+       while [ "${#ID}" -lt 11 ]; do
+           IFS='' read -r CHUNK </dev/urandom
+           while [ -n "$CHUNK" ] && [ "${#ID}" -lt 11 ]; do
+               CHR="${CHUNK%"${CHUNK#?}"}"
+               CHUNK="${CHUNK#?}"
+               case "$CHR" in [a-zA-Z0-9_-]) ID="$ID$CHR"; esac
+           done
+       done
+       printf '%s\n' "$ID"
+   }
+
+   random_id
+   -------------------------------------------------
+** TODO Add '/api/delete' for deleting notes
+** TODO Cleanup scripts
+   Source a central script, just like for Stickynotes? Central config should
+   also be there. E.g. a variable specifying the data directory.
+** TODO Set up https on home server
+** TODO Make sure files have the commit date as mtime.
+** TODO Tag support for '/api/list'?
+   Specifically searching for tags. Maybe add: '/api/list?tag=XXX'?
+* [2/2] DONE
+** DONE Don't fetch note on init if already in localStorage
+   CLOSED: [2026-10-07 Wed 16:00]
+** DONE Save note content in localStorage on load
+   CLOSED: [2026-10-07 Wed 15:59]
+* EOF
