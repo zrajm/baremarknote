@@ -1,20 +1,20 @@
 // -*- mode: js; js-indent-level: 2; -*-
 
-// Make <nav> element horizontally resizable.
+// Make <aside> element horizontally resizable.
 
-const nav = document.querySelector('nav')
+const aside = document.querySelector('aside')
 
-nav.addEventListener('pointerdown', e => {
-  const r = nav.getBoundingClientRect()
+aside.addEventListener('pointerdown', e => {
+  const r = aside.getBoundingClientRect()
   if (e.clientX < r.right - 8) {
     return
   }
   e.preventDefault()
   document.body.style.userSelect = 'none'
   const startX = e.clientX
-  const startW = nav.offsetWidth
+  const startW = aside.offsetWidth
   const move = ev => {
-    nav.style.width = Math.max(100, Math.min(startW + ev.clientX - startX, window.innerWidth * 0.5)) + 'px'
+    aside.style.width = Math.max(100, Math.min(startW + ev.clientX - startX, window.innerWidth * 0.5)) + 'px'
   }
   const up = () => {
     document.removeEventListener('pointermove', move)

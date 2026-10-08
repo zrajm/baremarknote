@@ -1,7 +1,7 @@
 // -*- mode: js; js-indent-level: 2; -*-
 // Copyright (c) 2026 by zrajm. License: GPLv2.
 
-import "./nav-resize.js"
+import "./resize-menu.js"
 
 const $nav  = document.querySelector('nav')
 const $view = document.querySelector('#view')
