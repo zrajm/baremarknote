@@ -1,15 +1,8 @@
 // -*- mode: js; js-indent-level: 2; -*-
 // Copyright (c) 2026 by zrajm. License: GPLv2.
 
+import { html, showError, $nav, $view } from './shared.js'
 import "./resize-menu.js"
-
-const $nav  = document.querySelector('nav')
-const $view = document.querySelector('#view')
-
-// FIXME: Show an error message in web GUI
-function showError(err) {
-  $view.textContent = err
-}
 
 function dateStr(epochSec, date = new Date(epochSec * 1000)) {
   const parts = new Intl.DateTimeFormat("en-US", {
@@ -51,14 +44,6 @@ function getText(url) {
   })
 }
 
-function insertHTML($parent, html) {
-  const $templ = document.createElement('template')
-  $templ.innerHTML = html.trim()
-  const $el = $templ.content.firstElementChild
-  $parent.appendChild($el)
-  return $el
-}
-
 // Fetch the heading from a Markdown document.
 function getHeading(text = '') {
   const [heading] = (text.match(/^\s*(\S.*)/ ?? ['']))
@@ -71,8 +56,9 @@ function getHeading(text = '') {
 // local note is overwritten by server note.)
 function syncNote(note) {
   // Insert placeholder for note in index menu.
-  const $note = insertHTML($nav,
+  const [$note] = html(
     `<a title="Updated: ${dateStr(note.updated)}" href="api/get?id=${note.id}">`)
+  $nav.append($note)
 
   // Get note info from localStorage (if exists and has same timestamp as server).
   const localNote = localStorage.getItem(note.id)
