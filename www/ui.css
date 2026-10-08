@@ -63,6 +63,7 @@ article#view {
   height: 100%;
   padding: .25rem .5rem;
   white-space: pre;
+  font-family: Consolas, "Lucida Console", "Courier New", monospace;
 }
 
 /*EOF*/
