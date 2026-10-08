@@ -2,8 +2,8 @@
 Copyright (c) 2026 by zrajm. License: GPLv2.
 
 * [0/12] Frontend
-** TODO Hide note menu
-** TODO Make resizing of menu work again
+** TODO Automatically load top note
+** TODO Hide note menu (completely)
 ** TODO Switch between preview & Markdown
    Insert a '\b' (backspace character) where the cursor is before running it
    through Markdown. Then insert an HTML tag which we can scroll to in order to
@@ -37,8 +37,12 @@ Copyright (c) 2026 by zrajm. License: GPLv2.
    For making the most of a large screen, allow editing of multiple notes at
    the same time. Dragging a note onto one of the borders of the edit view
    should open up a new edit view there.
-** TODO Compress notes in localStorage?
-   Possibly compress notes, possibly whole data structure.
+** TODO Use `IndexDB` instead of `localStorage` for notes
+   IndexDB (`navigator.storage`) allows for 10GB quota (on my machine) -- that
+   'giga' with a 'G' -- while browser defaults for localStorage only allows for
+   circa 10MB or so for storage.
+
+   However, it seems that IndexDB will only work for pages fetched via HTTPS.
 ** TODO Add note creation time to interface?
    Reverse chronological sort by last update time
    ----------------------------------------
@@ -51,10 +55,13 @@ Copyright (c) 2026 by zrajm. License: GPLv2.
    END { for (i=1; i<=n; i++) { f=order[i]; printf '%s %s %s\n', updated[f], created[f], f } }'
    ----------------------------------------
 ** TODO Incrementally save edits to server                          :DISTANT:
-* [0/8] Backend
+* [0/3] General
 ** TODO Find some reasonable way of packaging some test data
    The files of the current 'data/' dir + some scripts for setting up git as
    the backend.
+** TODO Add README file
+** TODO Add LICENSE file
+* [0/7] Backend
 ** TODO Login
 ** TODO Add '/api/create' for creating notes
    Test for uniqueness, so as to not overwrite any note.
@@ -82,10 +89,14 @@ Copyright (c) 2026 by zrajm. License: GPLv2.
    Source a central script, just like for Stickynotes? Central config should
    also be there. E.g. a variable specifying the data directory.
 ** TODO Set up https on home server
-** TODO Make sure files have the commit date as mtime.
+** TODO Make sure files have the commit date as mtime
 ** TODO Tag support for '/api/list'?
    Specifically searching for tags. Maybe add: '/api/list?tag=XXX'?
-* [2/2] DONE
+* [4/4] DONE
+** DONE Note search
+   CLOSED: [2026-10-09 Fri 00:11]
+** DONE Make resizing of menu work again
+   CLOSED: [2026-10-08 Thu 22:42]
 ** DONE Don't fetch note on init if already in localStorage
    CLOSED: [2026-10-07 Wed 16:00]
 ** DONE Save note content in localStorage on load

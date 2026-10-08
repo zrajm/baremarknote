@@ -3,6 +3,7 @@
 
 import { html, showError, $nav, $view } from './shared.js'
 import "./resize-menu.js"
+import "./search.js"
 
 function dateStr(epochSec, date = new Date(epochSec * 1000)) {
   const parts = new Intl.DateTimeFormat("en-US", {
@@ -57,7 +58,7 @@ function getHeading(text = '') {
 function syncNote(note) {
   // Insert placeholder for note in index menu.
   const [$note] = html(
-    `<a title="Updated: ${dateStr(note.updated)}" href="api/get?id=${note.id}">`)
+    `<a id="${note.id}" title="Updated: ${dateStr(note.updated)}" href="api/get?id=${note.id}">`)
   $nav.append($note)
 
   // Get note info from localStorage (if exists and has same timestamp as server).

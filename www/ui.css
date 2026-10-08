@@ -11,6 +11,8 @@ body {
   height: 100vh;
 }
 
+[hidden] { display: none !important }
+
 aside { background: #8882; border-right-color: #ccc; }
 a { color: #06c; }
 
@@ -25,10 +27,10 @@ aside {
   width: 200px;
   min-width: 100px;
   max-width: 50%;
-  a {
+  & > nav > * {
     display: block;
-    padding: .25rem;
-    border-bottom: 1px solid #8883;
+    padding: .25rem .5rem;
+    border: solid #8883; border-width: 0 0 1px 0;
     min-height: 2lh;
     text-decoration: none;
     color: currentColor;
