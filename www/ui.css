@@ -13,18 +13,17 @@ body {
 
 [hidden] { display: none !important }
 
-aside { background: #8882; border-right-color: #ccc; }
+aside { background: #8882 }
 a { color: #06c; }
 
 @media (prefers-color-scheme: dark) {
   body { background: #111; color: #eee; }
-  aside { border-right-color: #333; }
   a { color: #6cf; }
 }
 
 nav { overflow-y: scroll; max-height: 100vh; }
 aside {
-  width: 200px;
+  width: 250px;
   min-width: 100px;
   max-width: 50%;
   & > nav > * {
@@ -34,9 +33,7 @@ aside {
     min-height: 2lh;
     text-decoration: none;
     color: currentColor;
-    &:hover {
-      box-shadow: inset 0 0 0 9999px #8883;
-    }
+    &:hover { box-shadow: inset 0 0 0 9999px #8883 }
   }
 }
 
