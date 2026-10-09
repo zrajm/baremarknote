@@ -4,6 +4,7 @@
 import { html, showError, $nav, $view } from './shared.js'
 import "./resize-menu.js"
 import "./search.js"
+import "./view-switcher.js"
 
 function dateStr(epochSec, date = new Date(epochSec * 1000)) {
   const parts = new Intl.DateTimeFormat("en-US", {
@@ -88,6 +89,7 @@ $nav.addEventListener('click', (e) => {
   if (!$a) { return }
 
   const url = $a.href
+  const id  = $a.id
 
   // let modified / middle clicks behave normally
   if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) { return }
@@ -95,12 +97,13 @@ $nav.addEventListener('click', (e) => {
 
   fetch(url)
     .then(reply => {
-      if (!reply.ok) {
-        throw new Error(`HTTP ${reply.status}`)
-      }
+      if (!reply.ok) { throw Error(`HTTP ${reply.status}`) }
       return reply.text()
     })
-    .then(note => { $view.textContent = note })
+    .then(note => {
+      $view.textContent = note
+      $view.dataset.id = id
+    })
     .catch(err => { showError(`Failed to load note: ${err.message}`) })
 })
 

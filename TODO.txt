@@ -1,8 +1,20 @@
 -*- org -*-
 Copyright (c) 2026 by zrajm. License: GPLv2.
 
-* [0/12] Frontend
+* [0/15] Frontend
 ** TODO Automatically load top note
+** TODO Separate (isolated) CSS for edit view
+** TODO Cache notes correctly
+   Currently, rendering the note loads it from localStorage, but in all other
+   instances it is loaded from the server.
+
+   When app starts, the notes should only be downloaded if they have a newer
+   datestamp in the index, otherwise just retain version in localStorage.
+** TODO Respect rendering mode when loading new note
+   Clicking on note in menu should display in current mode, i.e. load into
+   rendered HTML if view is 'fancy'. If in 'fancy' mode, render as HTML. If
+   not, display Markdown.
+** TODO '#' at top of note should render correctly
 ** TODO Hide note menu (completely)
 ** TODO Switch between preview & Markdown
    Insert a '\b' (backspace character) where the cursor is before running it
@@ -29,7 +41,6 @@ Copyright (c) 2026 by zrajm. License: GPLv2.
    note).
 ** TODO Add Markdown
    Markdown library and CSS shall be configurable.
-** TODO Separate (isolated) CSS for edit view
 ** TODO Show errors in a notification-like card
 ** TODO The note-selection menu should fade out foreground color
    A scroll shadow. See chat.deepseek.com for an example.
@@ -92,7 +103,9 @@ Copyright (c) 2026 by zrajm. License: GPLv2.
 ** TODO Make sure files have the commit date as mtime
 ** TODO Tag support for '/api/list'?
    Specifically searching for tags. Maybe add: '/api/list?tag=XXX'?
-* [4/4] DONE
+* [5/5] DONE
+** DONE Show notes as rendered HTML
+   CLOSED: [2026-10-09 Fri 04:40]
 ** DONE Note search
    CLOSED: [2026-10-09 Fri 00:11]
 ** DONE Make resizing of menu work again

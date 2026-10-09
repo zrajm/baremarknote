@@ -62,8 +62,16 @@ aside {
 article#view {
   height: 100%;
   padding: .25rem .5rem;
+  overflow: auto;
+}
+
+article#view:not(.fancy) {
   white-space: pre;
   font-family: Consolas, "Lucida Console", "Courier New", monospace;
+}
+
+article#view.fancy {
+  font-family: serif;
 }
 
 /*EOF*/
