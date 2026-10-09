@@ -49,7 +49,7 @@ function getText(url) {
 // Fetch the heading from a Markdown document.
 function getHeading(text = '') {
   const [heading] = (text.match(/^\s*(\S.*)/ ?? ['']))
-  return heading.trim()
+  return heading.trim().replace(/^#+ */, '')
 }
 
 // Make sure we have the latest version of each note, and populate the

@@ -15,6 +15,8 @@ Copyright (c) 2026 by zrajm. License: GPLv2.
    rendered HTML if view is 'fancy'. If in 'fancy' mode, render as HTML. If
    not, display Markdown.
 ** TODO '#' at top of note should render correctly
+   It actually does if one double clicks on the view a couple of times, it just
+   doesn't show up the first time. :(
 ** TODO Hide note menu (completely)
 ** TODO Switch between preview & Markdown
    Insert a '\b' (backspace character) where the cursor is before running it
