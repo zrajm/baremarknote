@@ -5,4 +5,7 @@
 *.bak
 *.tmp
 
+# Repo-specific.
+certs/*.pem
+
 #[eof]

@@ -1,9 +1,11 @@
 -*- org -*-
 Copyright (c) 2026 by zrajm. License: GPLv2.
 
-* [0/15] Frontend
+* [0/17] Frontend
 ** TODO Automatically load top note
 ** TODO Separate (isolated) CSS for edit view
+** TODO Show second line of note in menu
+   Be able to show highlighted line/snippet if search is active.
 ** TODO Cache notes correctly
    Currently, rendering the note loads it from localStorage, but in all other
    instances it is loaded from the server.
@@ -68,10 +70,13 @@ Copyright (c) 2026 by zrajm. License: GPLv2.
    END { for (i=1; i<=n; i++) { f=order[i]; printf '%s %s %s\n', updated[f], created[f], f } }'
    ----------------------------------------
 ** TODO Incrementally save edits to server                          :DISTANT:
-* [0/3] General
+** TODO Highlight found words in menu
+* [0/5] General
 ** TODO Find some reasonable way of packaging some test data
    The files of the current 'data/' dir + some scripts for setting up git as
    the backend.
+** TODO Enable https on localhost
+** TODO Set up with https on internet-facing server
 ** TODO Add README file
 ** TODO Add LICENSE file
 * [0/7] Backend
@@ -102,10 +107,14 @@ Copyright (c) 2026 by zrajm. License: GPLv2.
    Source a central script, just like for Stickynotes? Central config should
    also be there. E.g. a variable specifying the data directory.
 ** TODO Set up https on home server
+   Save script for setting up https to this repository. It should also verify
+   the age of the of the current certificate, and update it if necessary.
 ** TODO Make sure files have the commit date as mtime
 ** TODO Tag support for '/api/list'?
    Specifically searching for tags. Maybe add: '/api/list?tag=XXX'?
-* [5/5] DONE
+* [6/6] DONE
+** DONE Script for setting up https certificates on devel
+   CLOSED: [2026-10-12 Mon 01:06]
 ** DONE Show notes as rendered HTML
    CLOSED: [2026-10-09 Fri 04:40]
 ** DONE Note search
