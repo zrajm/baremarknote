@@ -50,7 +50,7 @@ function getNoteHeading(noteText = '') {
 // left-hand index menu with note data. FIXME: Sync is simplistic, we only
 // check if server timestamp is the same as local timestamp, and if it isn't
 // local note is overwritten by server note.)
-function syncNote(noteInfo) {
+function syncNote(noteInfo, func) {
   // Insert placeholder for note in index menu.
   const [$menuItem] = html(
     `<a id="${noteInfo.id}" title="Updated: ${dateStr(noteInfo.updated)}" href="api/get?id=${noteInfo.id}">`)
@@ -59,12 +59,12 @@ function syncNote(noteInfo) {
   // Get note info from localStorage (if exists and has same timestamp as server).
   const localNote = localStorage.getItem(noteInfo.id)
   if (localNote && localNote.updated === noteInfo.updated) {
-    $menuItem.innerText = getNoteHeading(noteText) // update note in index menu
+    updateMenuItem(noteInfo.id, noteText, $menuItem, func)
     return
   }
   // Get note info from server.
   getText(`./api/get?id=${noteInfo.id}`).then(noteText => {
-    $menuItem.innerText = getNoteHeading(noteText) // update note in index menu
+    updateMenuItem(noteInfo.id, noteText, $menuItem, func)
     localStorage.setItem(noteInfo.id, JSON.stringify({
       updated: noteInfo.updated,
       text: noteText,
@@ -72,12 +72,22 @@ function syncNote(noteInfo) {
   })
 }
 
+function updateMenuItem(noteId, noteText, $menuItem, func) {
+  $menuItem.innerText = getNoteHeading(noteText) // update note in index menu
+  if (func) { func(noteId, noteText) }
+}
+
+function updateView(noteId, noteText) {
+  $view.textContent = noteText
+  $view.dataset.id = noteId
+}
+
 // On load, fetch note index from server.
 getJSON('./api/list')
   .then(reply => {
-    for (const noteInfo of reply.list) {
-      syncNote(noteInfo)
-    }
+    reply.list.forEach((noteInfo, i) => {
+      syncNote(noteInfo, i === 0 ? updateView : null)
+    })
   })
   .catch(err => { showError(`Failed to list notes: ${err.message}`) })
 
@@ -98,10 +108,7 @@ $nav.addEventListener('click', (e) => {
       if (!reply.ok) { throw Error(`HTTP ${reply.status}`) }
       return reply.text()
     })
-    .then(note => {
-      $view.textContent = note
-      $view.dataset.id = id
-    })
+    .then(note => { updateView(id, note) })
     .catch(err => { showError(`Failed to load note: ${err.message}`) })
 })
 

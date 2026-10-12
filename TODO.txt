@@ -1,8 +1,13 @@
 -*- org -*-
 Copyright (c) 2026 by zrajm. License: GPLv2.
 
-* [0/17] Frontend
-** TODO Automatically load top note
+* [0/18] Frontend
+** TODO Show clearly when API called failed
+   If there's a non-JSON response, we might be talking to an incorrectly
+   configured web server / server alias without CGI. This should very clearly
+   indicate this. (Since it often happens with my `nomi/baremarknote`.)
+** TODO Note should be shown in right mode                              :BUG:
+   Always show as fancy, when fancy is set, and as source when source is set.
 ** TODO Separate (isolated) CSS for edit view
 ** TODO Show second line of note in menu
    Be able to show highlighted line/snippet if search is active.
@@ -113,7 +118,9 @@ Copyright (c) 2026 by zrajm. License: GPLv2.
    plugins to autofill the password).
 ** TODO Tag support for '/api/list'?
    Specifically searching for tags. Maybe add: '/api/list?tag=XXX'?
-* [9/9] DONE
+* [10/10] DONE
+** DONE Automatically load top note
+   CLOSED: [2026-10-13 Tue 00:26]
 ** DONE Include Baremark & Quotecurl as submodules
    CLOSED: [2026-10-12 Mon 03:36]
    Needed in order to avoid CORS, since Baremarknote is now on its own local
