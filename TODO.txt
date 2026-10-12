@@ -108,7 +108,10 @@ Copyright (c) 2026 by zrajm. License: GPLv2.
 ** TODO Make sure files have the commit date as mtime
 ** TODO Tag support for '/api/list'?
    Specifically searching for tags. Maybe add: '/api/list?tag=XXX'?
-* [7/7] DONE
+* [8/8] DONE
+** DONE Set up Basic Auth
+   CLOSED: [2026-10-12 Mon 03:20]
+   See `certs/README.md`.
 ** DONE Documented Lighttpd conf for CGI and HTTPS on home server
    CLOSED: [2026-10-12 Mon 02:16]
    See `certs/README.md`.
