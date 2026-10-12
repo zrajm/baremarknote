@@ -7,23 +7,17 @@ import './search.js'
 import './view-switcher.js'
 
 function dateStr(epochSec, date = new Date(epochSec * 1000)) {
-  const parts = new Intl.DateTimeFormat('en-US', {
-    timeZoneName: 'longOffset',
-    year: 'numeric', month: '2-digit', day: '2-digit',
+  const x = new Intl.DateTimeFormat('en-US', {
+    hour12: false, timeZoneName: 'longOffset',
+    year: 'numeric',  month: '2-digit',    day: '2-digit',
     hour: '2-digit', minute: '2-digit', second: '2-digit',
-    hour12: false
   }).formatToParts(date)
+    .reduce((a, { type, value }) => (a[type] = value, a), {})
 
-  const get = type => parts.find(p => p.type === type)?.value ?? ''
-  // timeZoneName is 'GMT+02:00' or 'GMT' for UTC
-  let timeZone = get('timeZoneName').replace(/^GMT/, '')
-  if (timeZone === '') timeZone = '+00:00'
-
-  return (
-    get('year') + '-' + get('month') + '-' + get('day') + ' ' +
-      get('hour') + ':' + get('minute') + ':' + get('second') +
-      ' ' + timeZone
-  )
+  // timeZoneName is 'GMT+02:00' or 'GMT' for UTC.
+  return `${x.year}-${x.month}-${x.day} `
+    + `${x.hour}:${x.minute}:${x.second} `
+    + x.timeZoneName.replace(/^GMT(.*)$/, (_, x) => x || '+00:00')
 }
 
 // Returns promise, resolving in JSON.
