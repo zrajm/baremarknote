@@ -7,14 +7,14 @@
 // trampling on any HTML attributes etc).
 
 // Baremark + addons.
-import '/baremark/baremark.js'
-import '/baremark/addon/table.js'
-import '/baremark/addon/sup.js'
-import '/baremark/addon/autolink.js'
-import '/baremark/addon/id.js'
-import '/baremark/addon/meta.js'
-import '/baremark/addon/toc.js'
-import { quotecurl } from '/quotecurl/quotecurl.mjs'
+import './baremark/baremark.js'
+import './baremark/addon/table.js'
+import './baremark/addon/sup.js'
+import './baremark/addon/autolink.js'
+import './baremark/addon/id.js'
+import './baremark/addon/meta.js'
+import './baremark/addon/toc.js'
+import { quotecurl } from './quotecurl/quotecurl.mjs'
 
 // Process all text nodes in the DOM.
 function modifyTextNodes(func, node = document.body) {
