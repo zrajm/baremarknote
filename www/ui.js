@@ -2,37 +2,37 @@
 // Copyright (c) 2026 by zrajm. License: GPLv2.
 
 import { html, showError, $nav, $view } from './shared.js'
-import "./resize-menu.js"
-import "./search.js"
-import "./view-switcher.js"
+import './resize-menu.js'
+import './search.js'
+import './view-switcher.js'
 
 function dateStr(epochSec, date = new Date(epochSec * 1000)) {
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZoneName: "longOffset",
-    year: "numeric", month: "2-digit", day: "2-digit",
-    hour: "2-digit", minute: "2-digit", second: "2-digit",
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZoneName: 'longOffset',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
     hour12: false
-  }).formatToParts(date);
+  }).formatToParts(date)
 
-  const get = type => parts.find(p => p.type === type)?.value ?? "";
-  // timeZoneName is "GMT+02:00" or "GMT" for UTC
-  let offset = get("timeZoneName").replace(/^GMT/, "");
-  if (offset === "") offset = "+00:00";
+  const get = type => parts.find(p => p.type === type)?.value ?? ''
+  // timeZoneName is 'GMT+02:00' or 'GMT' for UTC
+  let timeZone = get('timeZoneName').replace(/^GMT/, '')
+  if (timeZone === '') timeZone = '+00:00'
 
   return (
     get('year') + '-' + get('month') + '-' + get('day') + ' ' +
       get('hour') + ':' + get('minute') + ':' + get('second') +
-      ' ' + offset
-  );
+      ' ' + timeZone
+  )
 }
 
 // Returns promise, resolving in JSON.
 function getJSON(url) {
   return fetch(url).then(reply => {
     if (!reply.ok) {
-      throw Error(`HTTP ${reply.status} ${reply.statusText}`);
+      throw Error(`HTTP ${reply.status} ${reply.statusText}`)
     }
-    return reply.json();
+    return reply.json()
   })
 }
 
@@ -40,47 +40,51 @@ function getJSON(url) {
 function getText(url) {
   return fetch(url).then(reply => {
     if (!reply.ok) {
-      throw Error(`HTTP ${reply.status} ${reply.statusText}`);
+      throw Error(`HTTP ${reply.status} ${reply.statusText}`)
     }
-    return reply.text();
+    return reply.text()
   })
 }
 
 // Fetch the heading from a Markdown document.
-function getHeading(text = '') {
-  const [heading] = (text.match(/^\s*(\S.*)/ ?? ['']))
-  return heading.trim().replace(/^#+ */, '')
+function getNoteHeading(noteText = '') {
+  const [noteHeading] = (noteText.match(/^\s*(\S.*)/ ?? ['']))
+  return noteHeading.trim().replace(/^#+ */, '')
 }
 
 // Make sure we have the latest version of each note, and populate the
 // left-hand index menu with note data. FIXME: Sync is simplistic, we only
 // check if server timestamp is the same as local timestamp, and if it isn't
 // local note is overwritten by server note.)
-function syncNote(note) {
+function syncNote(noteInfo) {
   // Insert placeholder for note in index menu.
-  const [$note] = html(
-    `<a id="${note.id}" title="Updated: ${dateStr(note.updated)}" href="api/get?id=${note.id}">`)
-  $nav.append($note)
+  const [$menuItem] = html(
+    `<a id="${noteInfo.id}" title="Updated: ${dateStr(noteInfo.updated)}" href="api/get?id=${noteInfo.id}">`)
+  $nav.append($menuItem)
 
   // Get note info from localStorage (if exists and has same timestamp as server).
-  const localNote = localStorage.getItem(note.id)
-  if (localNote && localNote.updated === note.updated) {
-    $note.innerText = getHeading(markdown)     // update note in index menu
+  const localNote = localStorage.getItem(noteInfo.id)
+  if (localNote && localNote.updated === noteInfo.updated) {
+    $menuItem.innerText = getNoteHeading(noteText) // update note in index menu
     return
   }
   // Get note info from server.
-  getText(`./api/get?id=${note.id}`).then(markdown => {
-    $note.innerText = getHeading(markdown)     // update note in index menu
-    localStorage.setItem(note.id, JSON.stringify({
-      updated: note.updated,
-      text: markdown,
+  getText(`./api/get?id=${noteInfo.id}`).then(noteText => {
+    $menuItem.innerText = getNoteHeading(noteText) // update note in index menu
+    localStorage.setItem(noteInfo.id, JSON.stringify({
+      updated: noteInfo.updated,
+      text: noteText,
     }))
   })
 }
 
 // On load, fetch note index from server.
 getJSON('./api/list')
-  .then(list => { for (const item of list.list) { syncNote(item) } })
+  .then(reply => {
+    for (const noteInfo of reply.list) {
+      syncNote(noteInfo)
+    }
+  })
   .catch(err => { showError(`Failed to list notes: ${err.message}`) })
 
 // When user clicks left-hand index menu.
