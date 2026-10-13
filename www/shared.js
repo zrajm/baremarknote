@@ -11,9 +11,17 @@ export function html(x) {
   return t.content.children
 }
 
-// FIXME: Show an error message in web GUI
-export function showError(err) {
-  $view.textContent = err
+const $dialog = document.querySelector('dialog')
+const $msg    = $dialog.querySelector('#msg')
+export function showError(errMsg) {
+  $msg.textContent = errMsg
+  $dialog.showModal()
+}
+
+$dialog.onclick = e => {
+  if (e.target === $dialog || e.target.closest('button')) {
+    $dialog.close()
+  }
 }
 
 //EOF

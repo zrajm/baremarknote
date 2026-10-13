@@ -74,4 +74,22 @@ article#view.fancy {
   font-family: serif;
 }
 
+dialog {
+  border: 1px solid #fff6; border-radius: 12px;
+  background: #fff1;
+  backdrop-filter: blur(16px) saturate(1.5);
+  box-shadow: 0 10px 30px #0008, 0 0 0 99999px #0008;
+  h2 { margin: 0 }
+  max-width: 50ch;
+  button {
+    &:hover { background: #fff3; border-radius: 4px }
+    border: 0; background: #0000;
+    font-size: 22px; line-height: .1; opacity: .5;
+    outline: 0;
+    position: absolute; top: 6px; right: 6px;
+    width: 26px; height: 26px;
+  }
+  &::backdrop { background: #0000; backdrop-filter: blur(4px) }
+}
+
 /*EOF*/

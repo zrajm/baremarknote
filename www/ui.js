@@ -20,23 +20,32 @@ function dateStr(epochSec, date = new Date(epochSec * 1000)) {
     + x.timeZoneName.replace(/^GMT(.*)$/, (_, x) => x || '+00:00')
 }
 
-// Returns promise, resolving in JSON.
-function getJSON(url) {
+class HTTPError   extends Error {}
+class SourceError extends Error {}
+function handleErrors(e) {
+  if      (e instanceof HTTPError)   { showError(`Server error: ${e.message}` ) }
+  else if (e instanceof SourceError) { showError(`Misconfigured server: ${e.message}`) }
+  else if (e instanceof SyntaxError) { showError('Server sent invalid JSON'   ) }
+  else                               { showError(`Network error: ${e.message}`) }
+}
+
+// Returns promise, resolving in text.
+function fetchText(url) {
   return fetch(url).then(reply => {
     if (!reply.ok) {
-      throw Error(`HTTP ${reply.status} ${reply.statusText}`)
+      return Promise.reject(new HTTPError(`HTTP ${reply.status} ${reply.statusText}`))
     }
-    return reply.json()
+    return reply.text()
   })
 }
 
 // Returns promise, resolving in JSON.
-function getText(url) {
-  return fetch(url).then(reply => {
-    if (!reply.ok) {
-      throw Error(`HTTP ${reply.status} ${reply.statusText}`)
+function fetchJSON(url) {
+  return fetchText(url).then(reply => {
+    if (reply.startsWith('#!')) {
+      return Promise.reject(new SourceError('API call returned source code'))
     }
-    return reply.text()
+    return JSON.parse(reply)
   })
 }
 
@@ -52,8 +61,9 @@ function getNoteHeading(noteText = '') {
 // local note is overwritten by server note.)
 function syncNote(noteInfo, func) {
   // Insert placeholder for note in index menu.
-  const [$menuItem] = html(
-    `<a id="${noteInfo.id}" title="Updated: ${dateStr(noteInfo.updated)}" href="api/get?id=${noteInfo.id}">`)
+  const [$menuItem] = html(`<a id="${noteInfo.id}" ` +
+                           `title="Updated: ${dateStr(noteInfo.updated)}" ` +
+                           `href="api/get?id=${noteInfo.id}">`)
   $nav.append($menuItem)
 
   // Get note info from localStorage (if exists and has same timestamp as server).
@@ -63,13 +73,14 @@ function syncNote(noteInfo, func) {
     return
   }
   // Get note info from server.
-  getText(`./api/get?id=${noteInfo.id}`).then(noteText => {
-    updateMenuItem(noteInfo.id, noteText, $menuItem, func)
-    localStorage.setItem(noteInfo.id, JSON.stringify({
-      updated: noteInfo.updated,
-      text: noteText,
-    }))
-  })
+  fetchText(`./api/get?id=${noteInfo.id}`)
+    .then(noteText => {
+      updateMenuItem(noteInfo.id, noteText, $menuItem, func)
+      localStorage.setItem(noteInfo.id, JSON.stringify({
+        updated: noteInfo.updated,
+        text: noteText,
+      }))
+    })
 }
 
 function updateMenuItem(noteId, noteText, $menuItem, func) {
@@ -83,13 +94,11 @@ function updateView(noteId, noteText) {
 }
 
 // On load, fetch note index from server.
-getJSON('./api/list')
-  .then(reply => {
-    reply.list.forEach((noteInfo, i) => {
-      syncNote(noteInfo, i === 0 ? updateView : null)
-    })
+fetchJSON('./api/list').then(reply => {
+  reply.list.forEach((noteInfo, i) => {
+    syncNote(noteInfo, i === 0 ? updateView : null)
   })
-  .catch(err => { showError(`Failed to list notes: ${err.message}`) })
+}).catch(handleErrors)
 
 // When user clicks left-hand index menu.
 $nav.addEventListener('click', (e) => {
@@ -103,12 +112,8 @@ $nav.addEventListener('click', (e) => {
   if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) { return }
   e.preventDefault()
 
-  fetch(url)
-    .then(reply => {
-      if (!reply.ok) { throw Error(`HTTP ${reply.status}`) }
-      return reply.text()
-    })
-    .then(note => { updateView(id, note) })
+  fetchText(url)
+    .then(noteText => { updateView(id, noteText) })
     .catch(err => { showError(`Failed to load note: ${err.message}`) })
 })
 

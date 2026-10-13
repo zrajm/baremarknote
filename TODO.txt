@@ -1,11 +1,7 @@
 -*- org -*-
 Copyright (c) 2026 by zrajm. License: GPLv2.
 
-* [0/18] Frontend
-** TODO Show clearly when API called failed
-   If there's a non-JSON response, we might be talking to an incorrectly
-   configured web server / server alias without CGI. This should very clearly
-   indicate this. (Since it often happens with my `nomi/baremarknote`.)
+* [0/17] Frontend
 ** TODO Note should be shown in right mode                              :BUG:
    Always show as fancy, when fancy is set, and as source when source is set.
 ** TODO Separate (isolated) CSS for edit view
@@ -118,7 +114,12 @@ Copyright (c) 2026 by zrajm. License: GPLv2.
    plugins to autofill the password).
 ** TODO Tag support for '/api/list'?
    Specifically searching for tags. Maybe add: '/api/list?tag=XXX'?
-* [10/10] DONE
+* [11/11] DONE
+** DONE Show clearly when API called failed
+   CLOSED: [2026-10-13 Tue 05:25]
+   If there's a non-JSON response, we might be talking to an incorrectly
+   configured web server / server alias without CGI. This should very clearly
+   indicate this. (Since it often happens with my `nomi/baremarknote`.)
 ** DONE Automatically load top note
    CLOSED: [2026-10-13 Tue 00:26]
 ** DONE Include Baremark & Quotecurl as submodules
