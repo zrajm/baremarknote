@@ -36,8 +36,9 @@ Copyright (c) 2026 by zrajm. License: GPLv2.
 ** DONE Note should be shown in right mode                              :BUG:
    CLOSED: [2026-10-13 Tue 14:15]
    Always show as fancy, when fancy is set, and as source when source is set.
-* [0/4] Editing of notes
-** TODO Put source in textarea (so it can be modified)
+* [1/4] Editing of notes
+** DONE Put source in textarea (so it can be modified)
+   CLOSED: [2026-10-13 Tue 17:37]
 ** TODO Save note locally (to localStorage)
    Going back and forth between edit & fancy should retain all changes.
 ** TODO Save notes to server

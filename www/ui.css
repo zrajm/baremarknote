@@ -74,6 +74,17 @@ article#view.fancy {
   font-family: serif;
 }
 
+textarea {
+  height: 100%;
+  width: 100%;
+  resize: none;
+  background: 0;
+  border: 0;
+  font-size: inherit;
+  padding: .25em .5em;
+  outline: 0;
+}
+
 dialog {
   border: 1px solid #fff6; border-radius: 12px;
   background: #fff1;

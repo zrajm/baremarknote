@@ -8,49 +8,43 @@ export function updateView(noteId, noteText) {
   if ($view.classList.contains('fancy')) {
     htmlifyMarkdown($view, noteText)
   } else {
-    $view.textContent = noteText
+    showSource(noteText)
   }
   $view.dataset.id = noteId
 }
 
-function getCursorPosition(clientX, clientY) {
-  if (document.caretRangeFromPoint) {          // Chrome/Safari
-    return document.caretRangeFromPoint(clientX, clientY)
-  }
-  if (document.caretPositionFromPoint) {       // Firefox
-    const pos = document.caretPositionFromPoint(clientX, clientY)
-    if (!pos) { return }
-    let range = document.createRange()
-    range.setStart(pos.offsetNode, pos.offset)
-    range.collapse(true)
-    return range
-  }
+function showSource(text) {
+  const $textarea = document.createElement('textarea')
+  $textarea.value = text
+  $view.replaceChildren($textarea)
 }
 
-$view.addEventListener('dblclick', e => {
-  // Get place where mouse clicked on text, and insert a backspace character
-  // there. With this, scroll to the same position after htmlifying the text,
-  // by replacing the '\b' with an HTML element with an ID and scrolling that
-  // into view.
-  const range = getCursorPosition(e.clientX, e.clientY)
-  const node = range?.startContainer
-  const scrollToMouse = node?.nodeType === Node.TEXT_NODE
-  if (scrollToMouse) {
-    const offset = range.startOffset
-    node.insertData(offset, '\b')          // insert backspace character
-  }
-
+// On mousedown, 2nd click, store text cursor position (before word is hilited).
+let caret
+$view.addEventListener('mousedown', e => {
+  caret = e.detail === 2                       // on mousedown 2nd click
+    ? e.target.selectionStart
+    : null
+})
+$view.addEventListener('dblclick', ({ target, clientX, clientY }) => {
   // Go into 'fancy' mode, i.e. display rendered HTML.
   // (HTMLifies the current Markdown.)
   if ($view.classList.toggle('fancy')) {
-    htmlifyMarkdown($view, $view.textContent)
+    // Insert backspace character at cursor position. (This survives Markdown
+    // conversion, and we late insert an element to scroll to here.)
+    const scrollToMouse = caret != null        // non-nullish
+    const noteText = scrollToMouse
+      ? (x => x.slice(0, caret) + '\b' + x.slice(caret))(target.value)
+      : target.value
+    htmlifyMarkdown($view, noteText)
+
     // Jump to the position user clicked on in Markdown.
     if (scrollToMouse) {
-      const $anchor = document.getElementById('_cursor')
+      const $anchor = $view.querySelector('[caret]')
       const anchorBox = $anchor.getBoundingClientRect()
       $view.scrollTo({
-        top:  $view.scrollTop  + anchorBox.top  - e.clientY,
-        left: $view.scrollLeft + anchorBox.left - e.clientX,
+        top:  $view.scrollTop  + anchorBox.top  - clientY,
+        left: $view.scrollLeft + anchorBox.left - clientX,
       })
     }
     return
@@ -61,7 +55,7 @@ $view.addEventListener('dblclick', e => {
   const noteId = $view.dataset.id
   const note = JSON.parse(localStorage.getItem(noteId))
   // FIXME: Can we jump to the position the user clicked on here too?
-  $view.textContent = note.text
+  showSource(note.text)
 })
 
 //EOF
