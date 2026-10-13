@@ -1,9 +1,7 @@
 -*- org -*-
 Copyright (c) 2026 by zrajm. License: GPLv2.
 
-* [0/17] Frontend
-** TODO Note should be shown in right mode                              :BUG:
-   Always show as fancy, when fancy is set, and as source when source is set.
+* [0/16] Frontend
 ** TODO Separate (isolated) CSS for edit view
 ** TODO Show second line of note in menu
    Be able to show highlighted line/snippet if search is active.
@@ -114,7 +112,10 @@ Copyright (c) 2026 by zrajm. License: GPLv2.
    plugins to autofill the password).
 ** TODO Tag support for '/api/list'?
    Specifically searching for tags. Maybe add: '/api/list?tag=XXX'?
-* [11/11] DONE
+* [12/12] DONE
+** DONE Note should be shown in right mode                              :BUG:
+   CLOSED: [2026-10-13 Tue 14:15]
+   Always show as fancy, when fancy is set, and as source when source is set.
 ** DONE Show clearly when API called failed
    CLOSED: [2026-10-13 Tue 05:25]
    If there's a non-JSON response, we might be talking to an incorrectly

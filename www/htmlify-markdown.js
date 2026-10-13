@@ -30,7 +30,7 @@ function modifyTextNodes(func, node = document.body) {
 
 // HTMLifies Markdown and inserts it into the specified element.
 export default function htmlifyMarkdown($el, markdown) {
-  const html = baremark($el.textContent)
+  const html = baremark(markdown)
     .replace(/[\b]/, '<span id="_cursor">⬤</span>')
   $el.innerHTML = html
   // Traverse the resulting elements and curlifiy quotes.

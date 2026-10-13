@@ -4,6 +4,15 @@
 import { $view } from './shared.js'
 import htmlifyMarkdown from './htmlify-markdown.js'
 
+export function updateView(noteId, noteText) {
+  if ($view.classList.contains('fancy')) {
+    htmlifyMarkdown($view, noteText)
+  } else {
+    $view.textContent = noteText
+  }
+  $view.dataset.id = noteId
+}
+
 function getCursorPosition(clientX, clientY) {
   if (document.caretRangeFromPoint) {          // Chrome/Safari
     return document.caretRangeFromPoint(clientX, clientY)

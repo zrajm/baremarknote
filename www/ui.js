@@ -4,7 +4,7 @@
 import { html, showError, $nav, $view } from './shared.js'
 import './resize-menu.js'
 import './search.js'
-import './view-switcher.js'
+import { updateView } from './view-switcher.js'
 
 function dateStr(epochSec, date = new Date(epochSec * 1000)) {
   const x = new Intl.DateTimeFormat('en-US', {
@@ -86,11 +86,6 @@ function syncNote(noteInfo, func) {
 function updateMenuItem(noteId, noteText, $menuItem, func) {
   $menuItem.innerText = getNoteHeading(noteText) // update note in index menu
   if (func) { func(noteId, noteText) }
-}
-
-function updateView(noteId, noteText) {
-  $view.textContent = noteText
-  $view.dataset.id = noteId
 }
 
 // On load, fetch note index from server.
