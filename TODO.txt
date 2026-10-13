@@ -1,7 +1,53 @@
 -*- org -*-
 Copyright (c) 2026 by zrajm. License: GPLv2.
 
-* [0/16] Frontend
+* [12/12] DONE
+** DONE Save note content in localStorage on load
+   CLOSED: [2026-10-07 Wed 15:59]
+** DONE Don't fetch note on init if already in localStorage
+   CLOSED: [2026-10-07 Wed 16:00]
+** DONE Make resizing of menu work again
+   CLOSED: [2026-10-08 Thu 22:42]
+** DONE Note search
+   CLOSED: [2026-10-09 Fri 00:11]
+** DONE Show notes as rendered HTML
+   CLOSED: [2026-10-09 Fri 04:40]
+** DONE Script for setting up HTTPS certificates
+   CLOSED: [2026-10-12 Mon 01:06]
+   Add script for setting up HTTPS to this repository. It should also verify
+   the age of the of the current certificate, and update it if necessary.
+** DONE Documented Lighttpd conf for CGI and HTTPS on home server
+   CLOSED: [2026-10-12 Mon 02:16]
+   See `certs/README.md`.
+** DONE Set up Basic Auth
+   CLOSED: [2026-10-12 Mon 03:20]
+   See `certs/README.md`.
+** DONE Include Baremark & Quotecurl as submodules
+   CLOSED: [2026-10-12 Mon 03:36]
+   Needed in order to avoid CORS, since Baremarknote is now on its own local
+   domain.
+** DONE Automatically load top note
+   CLOSED: [2026-10-13 Tue 00:26]
+** DONE Show clearly when API called failed
+   CLOSED: [2026-10-13 Tue 05:25]
+   If there's a non-JSON response, we might be talking to an incorrectly
+   configured web server / server alias without CGI. This should very clearly
+   indicate this. (Since it often happens with my `nomi/baremarknote`.)
+** DONE Note should be shown in right mode                              :BUG:
+   CLOSED: [2026-10-13 Tue 14:15]
+   Always show as fancy, when fancy is set, and as source when source is set.
+* [0/4] Editing of notes
+** TODO Put source in textarea (so it can be modified)
+** TODO Save note locally (to localStorage)
+   Going back and forth between edit & fancy should retain all changes.
+** TODO Save notes to server
+** TODO Button for creating new notes
+* [0/18] Frontend
+** TODO Link to a note
+   This should work to link to a specific note, a specific '#' anchor.
+   https://<server>/baremarknote/?note=3mUkJ5b-vQT#3-cut-list
+*** TODO Rename 'get' API call to 'note' (for consistency)
+*** TODO Remove use of 'id' attributes on web page (use 'data-id' instead)
 ** TODO Separate (isolated) CSS for edit view
 ** TODO Show second line of note in menu
    Be able to show highlighted line/snippet if search is active.
@@ -19,7 +65,7 @@ Copyright (c) 2026 by zrajm. License: GPLv2.
    It actually does if one double clicks on the view a couple of times, it just
    doesn't show up the first time. :(
 ** TODO Hide note menu (completely)
-** TODO Switch between preview & Markdown
+** [0/1] Switch between preview & Markdown
    Insert a '\b' (backspace character) where the cursor is before running it
    through Markdown. Then insert an HTML tag which we can scroll to in order to
    get to that spot in the preview.
@@ -112,39 +158,4 @@ Copyright (c) 2026 by zrajm. License: GPLv2.
    plugins to autofill the password).
 ** TODO Tag support for '/api/list'?
    Specifically searching for tags. Maybe add: '/api/list?tag=XXX'?
-* [12/12] DONE
-** DONE Note should be shown in right mode                              :BUG:
-   CLOSED: [2026-10-13 Tue 14:15]
-   Always show as fancy, when fancy is set, and as source when source is set.
-** DONE Show clearly when API called failed
-   CLOSED: [2026-10-13 Tue 05:25]
-   If there's a non-JSON response, we might be talking to an incorrectly
-   configured web server / server alias without CGI. This should very clearly
-   indicate this. (Since it often happens with my `nomi/baremarknote`.)
-** DONE Automatically load top note
-   CLOSED: [2026-10-13 Tue 00:26]
-** DONE Include Baremark & Quotecurl as submodules
-   CLOSED: [2026-10-12 Mon 03:36]
-   Needed in order to avoid CORS, since Baremarknote is now on its own local
-   domain.
-** DONE Set up Basic Auth
-   CLOSED: [2026-10-12 Mon 03:20]
-   See `certs/README.md`.
-** DONE Documented Lighttpd conf for CGI and HTTPS on home server
-   CLOSED: [2026-10-12 Mon 02:16]
-   See `certs/README.md`.
-** DONE Script for setting up HTTPS certificates
-   CLOSED: [2026-10-12 Mon 01:06]
-   Add script for setting up HTTPS to this repository. It should also verify
-   the age of the of the current certificate, and update it if necessary.
-** DONE Show notes as rendered HTML
-   CLOSED: [2026-10-09 Fri 04:40]
-** DONE Note search
-   CLOSED: [2026-10-09 Fri 00:11]
-** DONE Make resizing of menu work again
-   CLOSED: [2026-10-08 Thu 22:42]
-** DONE Don't fetch note on init if already in localStorage
-   CLOSED: [2026-10-07 Wed 16:00]
-** DONE Save note content in localStorage on load
-   CLOSED: [2026-10-07 Wed 15:59]
 * EOF
