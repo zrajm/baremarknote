@@ -5,6 +5,7 @@ import { html, showError, $nav, $view } from './shared.js'
 import './resize-menu.js'
 import './search.js'
 import { updateView } from './view-switcher.js'
+import noteCache from './notecache.js'
 
 function dateStr(epochSec, date = new Date(epochSec * 1000)) {
   const x = new Intl.DateTimeFormat('en-US', {
@@ -59,32 +60,31 @@ function getNoteHeading(noteText = '') {
 // left-hand index menu with note data. FIXME: Sync is simplistic, we only
 // check if server timestamp is the same as local timestamp, and if it isn't
 // local note is overwritten by server note.)
-function syncNote(noteInfo, func) {
+function syncNote(remoteNoteMeta, func) {
   // Insert placeholder for note in index menu.
-  const [$menuItem] = html(`<a data-id="${noteInfo.id}">`)
+  const [$menuItem] = html(`<a data-id="${remoteNoteMeta.id}">`)
 
   $nav.append($menuItem)
+  const localNote = noteCache.get(remoteNoteMeta.id)
 
-  // Get note info from localStorage (if exists and has same timestamp as server).
-  const localNote = localStorage.getItem(noteInfo.id)
-  if (localNote && localNote.updated === noteInfo.updated) {
-    updateMenuItem(noteInfo.id, noteText, $menuItem, func)
+  // Get note from cache (if exists and is newer or same as note on server).
+  if (localNote && localNote.updated >= remoteNoteMeta.updated) {
+    updateMenuItem(localNote, $menuItem, func)
     return
   }
   // Get note info from server.
-  fetchText(`./api/get?id=${noteInfo.id}`)
-    .then(noteText => {
-      updateMenuItem(noteInfo.id, noteText, $menuItem, func)
-      localStorage.setItem(noteInfo.id, JSON.stringify({
-        updated: noteInfo.updated,
-        text: noteText,
-      }))
+  fetchText(`./api/get?id=${remoteNoteMeta.id}`)
+    .then(remoteText => {
+      const remoteNote = { ...remoteNoteMeta, text: remoteText }
+      updateMenuItem(remoteNote, $menuItem, func)
+      noteCache.set(remoteNote)
     })
 }
 
-function updateMenuItem(noteId, noteText, $menuItem, func) {
-  $menuItem.innerText = getNoteHeading(noteText) // update note in index menu
-  if (func) { func(noteId, noteText) }
+function updateMenuItem(note, $menuItem, func) {
+  $menuItem.innerText = getNoteHeading(note.text) // update note in index menu
+  $menuItem.setAttribute('title', `Updated: ${dateStr(note.updated)}`)
+  if (func) { func(note) }
 }
 
 // On load, fetch note index from server.
@@ -95,19 +95,27 @@ fetchJSON('./api/list').then(reply => {
 }).catch(handleErrors)
 
 // When user clicks left-hand index menu.
-$nav.addEventListener('click', (e) => {
+$nav.addEventListener('click', e => {
   const $a = e.target.closest('a[data-id]')
   if (!$a) { return }
 
-  const id = $a.dataset.id
+  // If in edit mode, save current note text to cache.
+  const $textarea = $view.querySelector('textarea')
+  if ($textarea) {
+    noteCache.set({
+      id     : $view.dataset.id,
+      text   : $textarea.value,
+      updated: Math.round(Date.now() / 1000),
+    })
+  }
 
   // let modified / middle clicks behave normally
   if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) { return }
   e.preventDefault()
 
-  fetchText(`./api/get?id=${id}`)
-    .then(noteText => { updateView(id, noteText) })
-    .catch(err => { showError(`Failed to load note: ${err.message}`) })
+  const noteId = $a.dataset.id
+  const localNote = noteCache.get(noteId)
+  updateView(localNote)
 })
 
 //EOF

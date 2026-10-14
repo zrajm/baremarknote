@@ -36,13 +36,14 @@ Copyright (c) 2026 by zrajm. License: GPLv2.
 ** DONE Note should be shown in right mode                              :BUG:
    CLOSED: [2026-10-13 Tue 14:15]
    Always show as fancy, when fancy is set, and as source when source is set.
-* [2/5] Editing of notes
+* [3/5] Editing of notes
 ** DONE Put source in textarea (so it can be modified)
    CLOSED: [2026-10-13 Tue 17:37]
 ** DONE Remove use of 'id' attributes on web page (use 'data-id' instead)
    CLOSED: [2026-10-14 Wed 05:07]
    Also remove 'href' from the note menu.
-** TODO Save note locally (to localStorage)
+** DONE Save note locally (to localStorage)
+   CLOSED: [2026-10-14 Wed 06:05]
    Going back and forth between edit & fancy should retain all changes.
 ** TODO Save notes to server
 ** TODO Button for creating new notes

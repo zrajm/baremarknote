@@ -1,22 +1,11 @@
 // -*- mode: js; js-indent-level: 2; -*-
 // Copyright (c) 2026 by zrajm. License: GPLv2.
 //
-// Insert search form into <nav>. On search, hide non-matching notes by adding
-// 'hidden' attribute.
+// Insert search form into <nav>. On search, hide non-matching menu items by
+// adding the 'hidden' attribute.
 
 import { $nav, html } from './shared.js'
-
-function searchLocalStorage(regex) {
-  const matches = new Set()
-  for (let i = 0; i < localStorage.length; i++) {
-    const id = localStorage.key(i)
-    const value = localStorage.getItem(id)
-    if (value !== null && regex.test(value)) {
-      matches.add(id)
-    }
-  }
-  return matches
-}
+import noteCache from './notecache.js'
 
 const [$form] = html(`<form><input type=search name=q autocomplete=off placeholder=" ">`)
 
@@ -24,11 +13,11 @@ $nav.prepend($form)
 
 $form.addEventListener('submit', e => {
   e.preventDefault();
-  const query = $form.elements.q.value.trim()
-  const matching = searchLocalStorage(RegExp(query, 'i'))
-  for (const t of $nav.children) {
-    const menuItemId = t.dataset.id
-    t.hidden = menuItemId && !matching.has(menuItemId)
+  const regex = RegExp($form.elements.q.value.trim(), 'i')
+  const foundIds = noteCache.search(regex)
+  for (const $a of $nav.children) {
+    const menuItemId = $a.dataset.id
+    $a.hidden = menuItemId && !foundIds.has(menuItemId)
   }
 })
 
