@@ -14,7 +14,10 @@ body {
 [hidden] { display: none !important }
 
 aside { background: #8882 }
-a { color: #06c; }
+a {
+  color: #06c;
+  cursor: pointer;
+}
 
 @media (prefers-color-scheme: dark) {
   body { background: #111; color: #eee; }

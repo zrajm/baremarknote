@@ -36,19 +36,23 @@ Copyright (c) 2026 by zrajm. License: GPLv2.
 ** DONE Note should be shown in right mode                              :BUG:
    CLOSED: [2026-10-13 Tue 14:15]
    Always show as fancy, when fancy is set, and as source when source is set.
-* [1/4] Editing of notes
+* [2/5] Editing of notes
 ** DONE Put source in textarea (so it can be modified)
    CLOSED: [2026-10-13 Tue 17:37]
+** DONE Remove use of 'id' attributes on web page (use 'data-id' instead)
+   CLOSED: [2026-10-14 Wed 05:07]
+   Also remove 'href' from the note menu.
 ** TODO Save note locally (to localStorage)
    Going back and forth between edit & fancy should retain all changes.
 ** TODO Save notes to server
 ** TODO Button for creating new notes
-* [0/18] Frontend
-** TODO Link to a note
-   This should work to link to a specific note, a specific '#' anchor.
+* [0/16] Frontend
+** TODO URL should reflect currently loaded note
+   This should work to link to a specific note, a specific '#' anchor. Should
+   use history.pushState() et al. to update the URL. Reloading should bring
+   user back to same place.
    https://<server>/baremarknote/?note=3mUkJ5b-vQT#3-cut-list
 *** TODO Rename 'get' API call to 'note' (for consistency)
-*** TODO Remove use of 'id' attributes on web page (use 'data-id' instead)
 ** TODO Separate (isolated) CSS for edit view
 ** TODO Show second line of note in menu
    Be able to show highlighted line/snippet if search is active.

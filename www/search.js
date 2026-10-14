@@ -27,7 +27,8 @@ $form.addEventListener('submit', e => {
   const query = $form.elements.q.value.trim()
   const matching = searchLocalStorage(RegExp(query, 'i'))
   for (const t of $nav.children) {
-    t.hidden = t.id && !matching.has(t.id)
+    const menuItemId = t.dataset.id
+    t.hidden = menuItemId && !matching.has(menuItemId)
   }
 })
 

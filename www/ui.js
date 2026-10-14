@@ -61,9 +61,8 @@ function getNoteHeading(noteText = '') {
 // local note is overwritten by server note.)
 function syncNote(noteInfo, func) {
   // Insert placeholder for note in index menu.
-  const [$menuItem] = html(`<a id="${noteInfo.id}" ` +
-                           `title="Updated: ${dateStr(noteInfo.updated)}" ` +
-                           `href="api/get?id=${noteInfo.id}">`)
+  const [$menuItem] = html(`<a data-id="${noteInfo.id}">`)
+
   $nav.append($menuItem)
 
   // Get note info from localStorage (if exists and has same timestamp as server).
@@ -97,17 +96,16 @@ fetchJSON('./api/list').then(reply => {
 
 // When user clicks left-hand index menu.
 $nav.addEventListener('click', (e) => {
-  const $a = e.target.closest('a[href]')
+  const $a = e.target.closest('a[data-id]')
   if (!$a) { return }
 
-  const url = $a.href
-  const id  = $a.id
+  const id = $a.dataset.id
 
   // let modified / middle clicks behave normally
   if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) { return }
   e.preventDefault()
 
-  fetchText(url)
+  fetchText(`./api/get?id=${id}`)
     .then(noteText => { updateView(id, noteText) })
     .catch(err => { showError(`Failed to load note: ${err.message}`) })
 })
